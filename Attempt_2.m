@@ -1,3 +1,5 @@
+%test changes
+
 A = importdata('PilotTesting01.trc','\t',5);
 
 begin = 'What is the cell number for start of squat? \n';
