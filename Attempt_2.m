@@ -1,7 +1,13 @@
-%test changes
+% Example of how to set up a loop
+% filenames = {'Pilot1','Pilot2'};
+% 
+% for i_f=1:length(filenames)
+%     file = filenames{i_f};
 
 A = importdata('PilotTesting01.trc','\t',5);
 
+%You should automate this. Put the cell numbers for each trial/squat in a
+%text (or Excel) file and then just read them in. 
 begin = 'What is the cell number for start of squat? \n';
 a1 = input(begin);
 a = a1 - 5;
@@ -15,6 +21,7 @@ c1 = input(finish);
 c = c1 - 5;
 
 % 1) SACRUM = sacrum = sac
+%Why do you need for loops here?
 for sX = 21
     sacXB = A.data(a,sX);
     sacXL = A.data(b,sX);
@@ -48,6 +55,9 @@ for vZ = 89
     clvZF = A.data(c,vZ);
 end
 
+% The greater trochanter is the top of the thigh, near the hip. Just want
+% to make sure you've got the correct marker, since the abbreviation is
+% "Lsh".
 % 3) LGT = Left greater trochanter = Lsh
 for lsX = 24
     LshXB = A.data(a,lsX);
@@ -183,3 +193,43 @@ for rtZ = 80
     Rtoe5ZL = A.data(b,rtZ);
     Rtoe5ZF = A.data(c,rtZ);
 end
+
+%Next steps: make calculations
+
+%-----------------------------------------------
+%CALCULATION 1 - TORSO ANGLE RELATIVE TO TIBIA
+%-----------------------------------------------
+
+% Calculate trunk vector: sacrum to c7
+
+% Calculate tibia vector: lateral ankle to lateral knee
+
+% Use dot product to get angle between vectors (sagittal plane)
+
+%-----------------------------------------------
+%CALCULATION 2 - TORSO ANGLE RELATIVE TO TIBIA
+%-----------------------------------------------
+
+% Calculate femur vector: lateral knee to greater trochanter
+
+% Use dot product to get angle relative to horizontal (sagittal plane)
+
+%-----------------------------------------------
+%CALCULATION 3 - KNEES ALIGNED OVER FEET
+%-----------------------------------------------
+
+% Calculate knee joint center location (midpoint of lateral and medial
+% knee)
+
+% Calculate foot location (midpoint of met1 and met5)
+
+% Find XYZ offset
+
+%-----------------------------------------------
+%CALCULATION 4 - ARMS ALIGNED OVER FEET
+%-----------------------------------------------
+
+% Calculate wrist joint center location (midpoint of ulnar and radial
+% wrist markers)
+
+% Find XYZ offset relative to feet
