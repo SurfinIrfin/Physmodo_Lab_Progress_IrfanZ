@@ -1,3 +1,7 @@
+clear all
+close all
+clc
+
 %{
 filenames = {'PilotTesting01.trc','PilotTesting02.trc','PilotTesting03.trc','PilotTesting04.trc','PilotTesting05.trc','PilotTesting06.trc','PilotTesting07.trc','PilotTesting08.trc','PilotTesting09.trc','PilotTesting10.trc','PilotTesting11.trc','PilotTesting12.trc','PilotTesting13.trc','PilotTesting14.trc','PilotTesting15.trc','PilotTesting16.trc','PilotTesting17.trc','PilotTesting18.trc','PilotTesting19.trc','PilotTesting20.trc'};
 
@@ -5,22 +9,26 @@ for i_f = 1:length(filenames)
     file = filenames{i_f};
 end
 %}
- A = importdata('PilotTesting01.trc','\t',5);
+filepath = 'Z:\Data\Physmodo\Physmodo Processed Data\Pilot testing - Kinect\Trials_trc\';
+ A = importdata([filepath,'PilotTesting01.trc'],'\t',5);
 
 %You should automate this. Put the cell numbers for each trial/squat in a
 %text (or Excel) file and then just read them in. 
 
-begin = 'What is the cell number for start of squat? \n';
-a1 = input(begin);
-a = a1 - 5;
+%begin = 'What is the cell number for start of squat? \n';
+%a1 = input(begin);
+%a = a1 - 5;
+a = 6;
 
-low = 'What is the cell number for lowest point of squat? \n';
-b1 = input(low);
-b = b1 - 5;
+% low = 'What is the cell number for lowest point of squat? \n';
+% b1 = input(low);
+% b = b1 - 5;
+b = 64;
 
-finish = 'What is the cell number for end of squat? \n';
-c1 = input(finish);
-c = c1 - 5;
+% finish = 'What is the cell number for end of squat? \n';
+% c1 = input(finish);
+% c = c1 - 5;
+c = 128;
 
 % 1) SACRUM = sacrum = sac
 for sX = 21
@@ -369,6 +377,7 @@ end
 % 1) Calculate trunk vector: sacrum to c7
 
 % trunk vector at beginning of squat
+% **SHOULD BE C7, NOT CLAV
 trunk_begin_x = clvXB - sacXB;
 trunk_begin_y = clvYB - sacYB;
 trunk_begin_z = clvZB - sacZB;
@@ -379,6 +388,9 @@ trunk_vec_begin = [trunk_begin_x, trunk_begin_y, trunk_begin_z];
 trunk_low_x = clvXL - sacXL;
 trunk_low_y = clvYL - sacYL;
 trunk_low_z = clvZL - sacZL;
+
+h=drawPoint([clvXL,clvYL,clvZL],'clav',[]);
+drawPoint([sacXL,sacYL,sacZL],'sacrum',h);
 
 trunk_vec_low = [trunk_low_x, trunk_low_y, trunk_low_z];
 
@@ -394,6 +406,7 @@ trunk_vec_finish = [trunk_finish_x, trunk_finish_y, trunk_finish_z];
 
 % ---LEFT---
 % tibia vector at beginning of squat
+%** THE VALUES DIVIDED BY 2 SHOULD BE ADDED, NOT SUBTRACTED
 L_tibia_begin_x = ((LkneeXB - LMkneeXB)/2) - ((LankXB - LMankXB)/2);
 L_tibia_begin_y = ((LkneeYB - LMkneeYB)/2) - ((LankYB - LMankYB)/2);
 L_tibia_begin_z = ((LkneeZB - LMkneeZB)/2) - ((LankZB - LMankZB)/2);
@@ -440,8 +453,10 @@ tibiaR_vec_finish = [R_tibia_finish_x, R_tibia_finish_y, R_tibia_finish_z];
 % 3) Use dot product to get angle between vectors (sagittal plane)
 
 % ---LEFT side ANGLE---
+% **FOR THE SAGITTAL PLANE, YOU ONLY WANT THE Y AND Z COMPONENTS
 dot_L = dot(trunk_vec_low, tibiaL_vec_low);
 mag_L = norm(trunk_vec_low) * norm(tibiaL_vec_low);
+% **FOR THE DOT PRODUCT, YOU WANT TO USE ACOSD
 angle_L = asind(dot_L/mag_L);
 fprintf('\n1) TORSO ANGLE RELATIVE TO TIBIA:\nThe angle of the Left Tibia and Torso is %f degrees.\n', angle_L);
 
